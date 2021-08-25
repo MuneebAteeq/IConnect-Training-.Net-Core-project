@@ -5,26 +5,27 @@ using System.Collections.Generic;
 
 namespace IConnect_Training_.Net_Core_project.Models
 {
-    public partial class Doctor
+    public partial class Patient
     {
-        public Doctor()
+        public Patient()
         {
             Appointments = new HashSet<Appointment>();
+            MedicalHistories = new HashSet<MedicalHistory>();
         }
 
         public long Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public string Address { get; set; }
-        public string Notes { get; set; }
-        public decimal? MonthlySalary { get; set; }
+        public DateTime? Birthday { get; set; }
+        public string Gender { get; set; }
         public string PhoneNumber { get; set; }
-        public string Iban { get; set; }
         public string Email { get; set; }
-        public long SpecializationId { get; set; }
+        public string Address { get; set; }
+        public DateTime? RegisterationDate { get; set; }
+        public string Ssn { get; set; }
         public string Country { get; set; }
 
-        public virtual Specialization Specialization { get; set; }
         public virtual ICollection<Appointment> Appointments { get; set; }
+        public virtual ICollection<MedicalHistory> MedicalHistories { get; set; }
     }
 }
