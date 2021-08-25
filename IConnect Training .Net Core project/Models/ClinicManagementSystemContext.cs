@@ -39,8 +39,6 @@ namespace IConnect_Training_.Net_Core_project.Models
 
             modelBuilder.Entity<Appointment>(entity =>
             {
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
                 entity.HasOne(d => d.AppointmentNavigation)
                     .WithMany(p => p.Appointments)
                     .HasForeignKey(d => d.AppointmentId)
@@ -62,15 +60,11 @@ namespace IConnect_Training_.Net_Core_project.Models
 
             modelBuilder.Entity<AppointmentType>(entity =>
             {
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
                 entity.Property(e => e.Type).HasMaxLength(50);
             });
 
             modelBuilder.Entity<Doctor>(entity =>
             {
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
                 entity.Property(e => e.Address).HasMaxLength(100);
 
                 entity.Property(e => e.FirstName).HasMaxLength(50);
@@ -92,8 +86,6 @@ namespace IConnect_Training_.Net_Core_project.Models
 
             modelBuilder.Entity<MedicalHistory>(entity =>
             {
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
                 entity.Property(e => e.Description).HasMaxLength(50);
 
                 entity.HasOne(d => d.Patient)
@@ -105,8 +97,6 @@ namespace IConnect_Training_.Net_Core_project.Models
 
             modelBuilder.Entity<Patient>(entity =>
             {
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
                 entity.Property(e => e.Address).HasMaxLength(100);
 
                 entity.Property(e => e.FirstName).HasMaxLength(50);
@@ -118,8 +108,6 @@ namespace IConnect_Training_.Net_Core_project.Models
 
             modelBuilder.Entity<Specialization>(entity =>
             {
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
                 entity.Property(e => e.SpecializationName).HasMaxLength(50);
             });
 
