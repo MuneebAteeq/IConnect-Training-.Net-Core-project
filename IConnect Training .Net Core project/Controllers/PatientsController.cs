@@ -23,32 +23,39 @@ namespace IConnect_Training_.Net_Core_project.Controllers
         }
 
         // GET: Patients
-        public async Task<IActionResult> Index(string sortOrder)
+        public async Task<IActionResult> Index(string sortOrder, string searchString)
         {
             ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
-            ViewData["LastNameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "last_name_desc" : "";
+            ViewData["LastNameSortParm"] = sortOrder == "last_name" ? "last_name_desc" : "last_name";
             ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
-            var patinets = from s in _context.Patients
-                           select s;
+            ViewData["CurrentFilter"] = searchString;
+
+            var patinets = from p in _context.Patients
+                           select p;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                patinets = patinets.Where(p => p.LastName.Contains(searchString)
+                                       || p.FirstName.Contains(searchString));
+            }
             switch (sortOrder)
             {
                 case "name_desc":
-                    patinets = patinets.OrderByDescending(s => s.FirstName);
+                    patinets = patinets.OrderByDescending(p => p.FirstName);
                     break;
                 case "last_name_desc":
-                    patinets = patinets.OrderByDescending(s => s.LastName);
+                    patinets = patinets.OrderByDescending(p => p.LastName);
                     break;
                 case "last_name":
-                    patinets = patinets.OrderBy(s => s.LastName);
+                    patinets = patinets.OrderBy(p => p.LastName);
                     break;
                 case "Date":
-                    patinets = patinets.OrderBy(s => s.RegisterationDate);
+                    patinets = patinets.OrderBy(p => p.RegisterationDate);
                     break;
                 case "date_desc":
-                    patinets = patinets.OrderByDescending(s => s.RegisterationDate);
+                    patinets = patinets.OrderByDescending(p => p.RegisterationDate);
                     break;
                 default:
-                    patinets = patinets.OrderBy(s => s.FirstName);
+                    patinets = patinets.OrderBy(p => p.FirstName);
                     break;
             }
             return View(await patinets.AsNoTracking().ToListAsync());

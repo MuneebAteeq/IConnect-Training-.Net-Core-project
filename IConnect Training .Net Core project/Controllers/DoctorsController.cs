@@ -21,10 +21,43 @@ namespace IConnect_Training_.Net_Core_project.Controllers
         }
 
         // GET: Doctors
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sortOrder, string searchString)
         {
-            var clinicManagementSystemContext = _context.Doctors.Include(d => d.Specialization);
-            return View(await clinicManagementSystemContext.ToListAsync());
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["LastNameSortParm"] = sortOrder == "last_name" ? "last_name_desc" : "last_name";
+            ViewData["Specialization"] = sortOrder == "specialization" ? "specialization_desc" : "specialization";
+            ViewData["CurrentFilter"] = searchString;
+
+            var doctors = from d in _context.Doctors.Include(d => d.Specialization)
+                                                select d;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                doctors = doctors.Where(d => d.LastName.Contains(searchString)
+                                       || d.FirstName.Contains(searchString));
+            }
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    doctors = doctors.OrderByDescending(d => d.FirstName);
+                    break;
+                case "last_name_desc":
+                    doctors = doctors.OrderByDescending(d => d.LastName);
+                    break;
+                case "last_name":
+                    doctors = doctors.OrderBy(d => d.LastName);
+                    break;
+                case "specialization":
+                    doctors = doctors.OrderBy(d => d.Specialization.SpecializationName);
+                    break;
+                case "specialization_desc":
+                    doctors = doctors.OrderByDescending(d => d.Specialization.SpecializationName);
+                    break;
+                default:
+                    doctors = doctors.OrderBy(d => d.FirstName);
+                    break;
+            }
+
+            return View(await doctors.AsNoTracking().ToListAsync());
         }
 
         // GET: Doctors/Details/5
