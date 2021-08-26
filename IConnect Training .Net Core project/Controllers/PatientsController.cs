@@ -6,6 +6,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using IConnect_Training_.Net_Core_project.Models;
+using System.Net;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
+using System.Net.Http;
 
 namespace IConnect_Training_.Net_Core_project.Controllers
 {
@@ -19,9 +23,35 @@ namespace IConnect_Training_.Net_Core_project.Controllers
         }
 
         // GET: Patients
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sortOrder)
         {
-            return View(await _context.Patients.ToListAsync());
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["LastNameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "last_name_desc" : "";
+            ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
+            var patinets = from s in _context.Patients
+                           select s;
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    patinets = patinets.OrderByDescending(s => s.FirstName);
+                    break;
+                case "last_name_desc":
+                    patinets = patinets.OrderByDescending(s => s.LastName);
+                    break;
+                case "last_name":
+                    patinets = patinets.OrderBy(s => s.LastName);
+                    break;
+                case "Date":
+                    patinets = patinets.OrderBy(s => s.RegisterationDate);
+                    break;
+                case "date_desc":
+                    patinets = patinets.OrderByDescending(s => s.RegisterationDate);
+                    break;
+                default:
+                    patinets = patinets.OrderBy(s => s.FirstName);
+                    break;
+            }
+            return View(await patinets.AsNoTracking().ToListAsync());
         }
 
         // GET: Patients/Details/5
@@ -45,9 +75,27 @@ namespace IConnect_Training_.Net_Core_project.Controllers
         // GET: Patients/Create
         public IActionResult Create()
         {
+            getAllCountries();
             return View();
         }
+        void getAllCountries()
+        {
+            string url = "https://restcountries.eu/rest/v2/all";
+            List<string> countries = new List<string>();
 
+            using (WebClient webClient = new System.Net.WebClient())
+            {
+                var json = webClient.DownloadString(url);
+                dynamic array = JsonConvert.DeserializeObject(json);
+                foreach (var country in array)
+                {
+                    //Console.WriteLine(country.name);
+
+                    countries.Add(Convert.ToString(country.name));
+                }
+            }
+            ViewData["Countries"] = countries;
+        }
         // POST: Patients/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -77,6 +125,7 @@ namespace IConnect_Training_.Net_Core_project.Controllers
             {
                 return NotFound();
             }
+            getAllCountries();
             return View(patient);
         }
 

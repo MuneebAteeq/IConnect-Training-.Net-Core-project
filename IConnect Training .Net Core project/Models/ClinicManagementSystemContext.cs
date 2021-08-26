@@ -42,19 +42,16 @@ namespace IConnect_Training_.Net_Core_project.Models
                 entity.HasOne(d => d.AppointmentNavigation)
                     .WithMany(p => p.Appointments)
                     .HasForeignKey(d => d.AppointmentId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Appointments_AppointmentTypes");
 
                 entity.HasOne(d => d.Doctor)
                     .WithMany(p => p.Appointments)
                     .HasForeignKey(d => d.DoctorId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Appointments_Doctors");
 
                 entity.HasOne(d => d.Patient)
                     .WithMany(p => p.Appointments)
                     .HasForeignKey(d => d.PatientId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Appointments_Patients");
             });
 
@@ -80,7 +77,6 @@ namespace IConnect_Training_.Net_Core_project.Models
                 entity.HasOne(d => d.Specialization)
                     .WithMany(p => p.Doctors)
                     .HasForeignKey(d => d.SpecializationId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Doctors_Specializations");
             });
 
@@ -91,7 +87,6 @@ namespace IConnect_Training_.Net_Core_project.Models
                 entity.HasOne(d => d.Patient)
                     .WithMany(p => p.MedicalHistories)
                     .HasForeignKey(d => d.PatientId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_MedicalHistories_Patients");
             });
 

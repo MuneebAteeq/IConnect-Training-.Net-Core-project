@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using IConnect_Training_.Net_Core_project.Models;
+using System.Net;
+using Newtonsoft.Json;
 
 namespace IConnect_Training_.Net_Core_project.Controllers
 {
@@ -48,9 +50,27 @@ namespace IConnect_Training_.Net_Core_project.Controllers
         public IActionResult Create()
         {
             ViewData["SpecializationId"] = new SelectList(_context.Specializations, "Id", "Id");
+            getAllCountries();
             return View();
         }
+        void getAllCountries()
+        {
+            string url = "https://restcountries.eu/rest/v2/all";
+            List<string> countries = new List<string>();
 
+            using (WebClient webClient = new System.Net.WebClient())
+            {
+                var json = webClient.DownloadString(url);
+                dynamic array = JsonConvert.DeserializeObject(json);
+                foreach (var country in array)
+                {
+                    //Console.WriteLine(country.name);
+
+                    countries.Add(Convert.ToString(country.name));
+                }
+            }
+            ViewData["Countries"] = countries;
+        }
         // POST: Doctors/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -82,6 +102,7 @@ namespace IConnect_Training_.Net_Core_project.Controllers
                 return NotFound();
             }
             ViewData["SpecializationId"] = new SelectList(_context.Specializations, "Id", "Id", doctor.SpecializationId);
+            getAllCountries();
             return View(doctor);
         }
 
