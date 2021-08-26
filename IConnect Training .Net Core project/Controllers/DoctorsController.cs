@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using IConnect_Training_.Net_Core_project.Models;
 using System.Net;
 using Newtonsoft.Json;
+using ContosoUniversity;
 
 namespace IConnect_Training_.Net_Core_project.Controllers
 {
@@ -21,13 +22,24 @@ namespace IConnect_Training_.Net_Core_project.Controllers
         }
 
         // GET: Doctors
-        public async Task<IActionResult> Index(string sortOrder, string searchString)
+        public async Task<IActionResult> Index(string sortOrder,
+            string currentFilter,
+            string searchString,
+            int? pageNumber)
         {
+            ViewData["CurrentSort"] = sortOrder;
             ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewData["LastNameSortParm"] = sortOrder == "last_name" ? "last_name_desc" : "last_name";
             ViewData["Specialization"] = sortOrder == "specialization" ? "specialization_desc" : "specialization";
             ViewData["CurrentFilter"] = searchString;
-
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
             var doctors = from d in _context.Doctors.Include(d => d.Specialization)
                                                 select d;
             if (!String.IsNullOrEmpty(searchString))
@@ -56,8 +68,8 @@ namespace IConnect_Training_.Net_Core_project.Controllers
                     doctors = doctors.OrderBy(d => d.FirstName);
                     break;
             }
-
-            return View(await doctors.AsNoTracking().ToListAsync());
+            int pageSize = 3;
+            return View(await PaginatedList<Doctor>.CreateAsync(doctors.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
 
         // GET: Doctors/Details/5

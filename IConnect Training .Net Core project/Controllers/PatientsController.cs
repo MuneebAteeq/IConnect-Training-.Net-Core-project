@@ -10,6 +10,7 @@ using System.Net;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using System.Net.Http;
+using ContosoUniversity;
 
 namespace IConnect_Training_.Net_Core_project.Controllers
 {
@@ -23,13 +24,24 @@ namespace IConnect_Training_.Net_Core_project.Controllers
         }
 
         // GET: Patients
-        public async Task<IActionResult> Index(string sortOrder, string searchString)
+        public async Task<IActionResult> Index(string sortOrder,
+            string currentFilter,
+            string searchString,
+            int? pageNumber)
         {
+            ViewData["CurrentSort"] = sortOrder;
             ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewData["LastNameSortParm"] = sortOrder == "last_name" ? "last_name_desc" : "last_name";
             ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
             ViewData["CurrentFilter"] = searchString;
-
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
             var patinets = from p in _context.Patients
                            select p;
             if (!String.IsNullOrEmpty(searchString))
@@ -58,7 +70,8 @@ namespace IConnect_Training_.Net_Core_project.Controllers
                     patinets = patinets.OrderBy(p => p.FirstName);
                     break;
             }
-            return View(await patinets.AsNoTracking().ToListAsync());
+            int pageSize = 3;
+            return View(await PaginatedList<Patient>.CreateAsync(patinets.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
 
         // GET: Patients/Details/5
