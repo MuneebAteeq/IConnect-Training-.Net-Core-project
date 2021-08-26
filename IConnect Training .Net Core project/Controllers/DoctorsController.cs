@@ -94,7 +94,7 @@ namespace IConnect_Training_.Net_Core_project.Controllers
         // GET: Doctors/Create
         public IActionResult Create()
         {
-            ViewData["SpecializationId"] = new SelectList(_context.Specializations, "Id", "Id");
+            ViewData["Specializations"] = new SelectList(_context.Specializations, "Id", "SpecializationName");
             getAllCountries();
             return View();
         }

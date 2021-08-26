@@ -21,20 +21,20 @@
             @Html.DisplayNameFor(model => model.AppointmentNavigation)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.AppointmentNavigation.Id)
+            @Html.DisplayFor(model => model.AppointmentNavigation.Type)
         </dd class>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Doctor)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Doctor.Id)
-        </dd class>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Doctor.FirstName) @Html.DisplayFor(model => model.Doctor.LastName)
+        </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Patient)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Patient.Id)
-        </dd class>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Patient.FirstName) @Html.DisplayFor(model => model.Patient.LastName)
+        </dd>
     </dl>
     
     <form asp-action="Delete">

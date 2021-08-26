@@ -34,13 +34,13 @@
                 @Html.DisplayFor(modelItem => item.Reservation)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.AppointmentNavigation.Id)
+                @Html.DisplayFor(modelItem => item.AppointmentNavigation.Type)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Doctor.Id)
+                @Html.DisplayFor(modelItem => item.Doctor.FirstName) @Html.DisplayFor(modelItem => item.Doctor.LastName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Patient.Id)
+                @Html.DisplayFor(modelItem => item.Patient.FirstName) @Html.DisplayFor(modelItem => item.Patient.LastName)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
