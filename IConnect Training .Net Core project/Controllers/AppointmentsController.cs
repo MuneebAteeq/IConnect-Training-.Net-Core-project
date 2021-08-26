@@ -49,9 +49,9 @@ namespace IConnect_Training_.Net_Core_project.Controllers
         // GET: Appointments/Create
         public IActionResult Create()
         {
-            ViewData["AppointmentId"] = new SelectList(_context.AppointmentTypes, "Id", "Id");
-            ViewData["DoctorId"] = new SelectList(_context.Doctors, "Id", "Id");
-            ViewData["PatientId"] = new SelectList(_context.Patients, "Id", "Id");
+            ViewData["AppointmentTypes"] = new SelectList(_context.AppointmentTypes, "Id", "Type");
+            ViewData["DoctorsList"] = _context.Doctors;
+            ViewData["PatientsList"] = _context.Patients;
             return View();
         }
 
@@ -87,9 +87,9 @@ namespace IConnect_Training_.Net_Core_project.Controllers
             {
                 return NotFound();
             }
-            ViewData["AppointmentId"] = new SelectList(_context.AppointmentTypes, "Id", "Id", appointment.AppointmentId);
-            ViewData["DoctorId"] = new SelectList(_context.Doctors, "Id", "Id", appointment.DoctorId);
-            ViewData["PatientId"] = new SelectList(_context.Patients, "Id", "Id", appointment.PatientId);
+            ViewData["AppointmentTypes"] = new SelectList(_context.AppointmentTypes, "Id", "Type");
+            ViewData["DoctorsList"] = _context.Doctors;
+            ViewData["PatientsList"] = _context.Patients;
             return View(appointment);
         }
 

@@ -47,7 +47,7 @@ namespace IConnect_Training_.Net_Core_project.Controllers
         // GET: MedicalHistories/Create
         public IActionResult Create()
         {
-            ViewData["PatientId"] = new SelectList(_context.Patients, "Id", "Id");
+            ViewData["PatientsList"] = _context.Patients;
             return View();
         }
 
@@ -81,7 +81,7 @@ namespace IConnect_Training_.Net_Core_project.Controllers
             {
                 return NotFound();
             }
-            ViewData["PatientId"] = new SelectList(_context.Patients, "Id", "Id", medicalHistory.PatientId);
+            ViewData["PatientsList"] = _context.Patients;
             return View(medicalHistory);
         }
 

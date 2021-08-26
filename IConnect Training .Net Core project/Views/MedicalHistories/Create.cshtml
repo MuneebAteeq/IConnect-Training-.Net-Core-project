@@ -1,4 +1,5 @@
-﻿@model IConnect_Training_.Net_Core_project.Models.MedicalHistory
+﻿@using Microsoft.EntityFrameworkCore;
+@model IConnect_Training_.Net_Core_project.Models.MedicalHistory
 
 @{
     ViewData["Title"] = "Create";
@@ -16,8 +17,16 @@
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="PatientId" class="control-label"></label>
-                <select asp-for="PatientId" class ="form-control" asp-items="ViewBag.PatientId"></select>
+                <label asp-for="PatientId" class="control-label">Patient Name</label>
+                <select asp-for="PatientId" class="form-control">
+                    @{
+                        foreach (Patient patient in (DbSet<Patient>)ViewData["PatientsList"])
+                        {
+                            <option value="@patient.Id">@patient.FirstName @patient.LastName</option>
+                        }
+                    }
+                </select>
+                <span asp-validation-for="PatientId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

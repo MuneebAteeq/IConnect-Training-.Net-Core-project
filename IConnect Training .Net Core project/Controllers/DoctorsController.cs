@@ -146,7 +146,7 @@ namespace IConnect_Training_.Net_Core_project.Controllers
             {
                 return NotFound();
             }
-            ViewData["SpecializationId"] = new SelectList(_context.Specializations, "Id", "Id", doctor.SpecializationId);
+            ViewData["SpecializationId"] = new SelectList(_context.Specializations, "Id", "SpecializationName", doctor.SpecializationId);
             getAllCountries();
             return View(doctor);
         }

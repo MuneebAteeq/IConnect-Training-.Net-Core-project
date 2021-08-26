@@ -1,4 +1,5 @@
-﻿@model IConnect_Training_.Net_Core_project.Models.Appointment
+﻿@using Microsoft.EntityFrameworkCore;
+@model IConnect_Training_.Net_Core_project.Models.Appointment
 
 @{
     ViewData["Title"] = "Create";
@@ -12,12 +13,28 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="DoctorId" class="control-label"></label>
-                <select asp-for="DoctorId" class ="form-control" asp-items="ViewBag.DoctorId"></select>
+                <label asp-for="DoctorId" class="control-label">Doctor Name</label>
+                <select asp-for="DoctorId" class="form-control">
+                    @{
+                        foreach (Doctor doctor in (DbSet<Doctor>)ViewData["DoctorsList"])
+                        {
+                            <option value="@doctor.Id">@doctor.FirstName @doctor.LastName</option>
+                        }
+                    }
+                </select>
+                <span asp-validation-for="DoctorId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="PatientId" class="control-label"></label>
-                <select asp-for="PatientId" class ="form-control" asp-items="ViewBag.PatientId"></select>
+                <label asp-for="PatientId" class="control-label">Patient Name</label>
+                <select asp-for="PatientId" class="form-control">
+                    @{
+                        foreach (Patient patient in (DbSet<Patient>)ViewData["PatientsList"])
+                        {
+                            <option value="@patient.Id">@patient.FirstName @patient.LastName</option>
+                        }
+                    }
+                </select>
+                <span asp-validation-for="PatientId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Reservation" class="control-label"></label>
@@ -25,8 +42,9 @@
                 <span asp-validation-for="Reservation" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="AppointmentId" class="control-label"></label>
-                <select asp-for="AppointmentId" class ="form-control" asp-items="ViewBag.AppointmentId"></select>
+                <label asp-for="AppointmentId" class="control-label">Appointment Type</label>
+                <select asp-for="AppointmentId" class="form-control" asp-items="ViewBag.AppointmentTypes"></select>
+                <span asp-validation-for="AppointmentId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
